@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use JsonException;
-use Laravel\Sanctum\Sanctum;
 
 class AuthController extends Controller
 {
@@ -81,6 +80,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
+
         return response()->json([
             'status' => 200,
             'message' => 'You are logout!'
