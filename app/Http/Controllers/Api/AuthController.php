@@ -25,7 +25,7 @@ class AuthController extends Controller
      */
     public function register(Request $request): JsonResponse
     {
-        $result = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $result = $request->all();
 
         $validator = Validator::make($result, [
             'name' => ['required', 'max:255'],
@@ -34,8 +34,10 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            $dataError = $this->returnResponse(400, 'Validate fail, pls check again');
-            return response()->json($dataError, 400);
+            return response()->json([
+                'status' => 400,
+                'message' => 'Validate failed, pls check again',
+            ], 400);
         }
 
         $userInfo = $this->_user;
@@ -48,14 +50,16 @@ class AuthController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Register successfully',
-            'data' => $result,
             'token' => $token
         ], 200);
     }
 
+    /**
+     * @throws JsonException
+     */
     public function login(Request $request): JsonResponse
     {
-        $result = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $result = $request->all();
         $infoUser = [
             'email' => $result['email'],
             'password' => $result['password']
@@ -77,7 +81,7 @@ class AuthController extends Controller
         ], 401);
     }
 
-    public function logout(Request $request)
+    public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();
 
