@@ -20,9 +20,6 @@ class AuthController extends Controller
         $this->_user = $user;
     }
 
-    /**
-     * @throws JsonException
-     */
     public function register(Request $request): JsonResponse
     {
         $result = $request->all();
@@ -43,6 +40,7 @@ class AuthController extends Controller
         $userInfo = $this->_user;
         $userInfo->name = $result['name'];
         $userInfo->email = $result['email'];
+        $userInfo->roles = $result['roles'];
         $userInfo->password = Hash::make($result['password']);
         $userInfo->save();
 

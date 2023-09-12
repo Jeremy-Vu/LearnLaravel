@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Product;
-use App\Repositories\Product\ProductRepository;
+use App\Repositories\Eloquent\Product\ProductRepository;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
@@ -24,16 +25,20 @@ class ProductController extends Controller
      *
      * @return Collection|ProductRepository[]
      */
-    public function getAll()
+    public function index()
     {
-        return $this->_productRepository->getAll();
+        if (Auth::check()) {
+            return $this->_productRepository->getAll();
+        }else{
+            dd("11");
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function addProduct(Request $request)
     {
@@ -65,7 +70,7 @@ class ProductController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show($id)
     {
@@ -82,7 +87,7 @@ class ProductController extends Controller
         return response()->json([
             'status' => 401,
             'message' => 'Product not found',
-        ],400);
+        ],401);
     }
 
 
@@ -91,7 +96,7 @@ class ProductController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(Request $request, $id)
     {
@@ -129,7 +134,7 @@ class ProductController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function destroy($id)
     {

@@ -21,26 +21,25 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/register', [AuthController::class, 'register']);
-
 Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register']);
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::group(['prefix' => 'category',  'middleware' => 'checkAdmin'], function() {
+        Route::get('getAll', [CategoryController::class,'index']);
+        Route::post('add', [CategoryController::class,'addCategory']);
+        Route::get('show/{id}', [CategoryController::class,'show']);
+        Route::post('update/{id}', [CategoryController::class,'update']);
+        Route::post('delete/{id}', [CategoryController::class,'destroy']);
+    });
+    Route::group(['prefix' => 'product',  'middleware' => 'checkAdmin'], function() {
+        Route::get('getAll', [ProductController::class,'index']);
+        Route::post('add', [ProductController::class,'addProduct']);
+        Route::get('show/{id}', [ProductController::class,'show']);
+        Route::post('update/{id}', [ProductController::class,'update']);
+        Route::post('delete/{id}', [ProductController::class,'destroy']);
+    });
+
 });
 
-Route::group(['prefix' => 'product',  'middleware' => 'checkAdmin'], function() {
-    Route::get('getAll', [ProductController::class,'getAll']);
-    Route::post('add', [ProductController::class,'addProduct']);
-    Route::get('find/{id}', [ProductController::class,'show']);
-    Route::post('update/{id}', [ProductController::class,'update']);
-    Route::post('delete/{id}', [ProductController::class,'destroy']);
-});
-
-Route::group(['prefix' => 'category',  'middleware' => 'checkAdmin'], function()
-{
-    Route::get('getAll', [CategoryController::class,'getAll']);
-    Route::post('add', [CategoryController::class,'addCategory']);
-    Route::get('find/{id}', [CategoryController::class,'show']);
-    Route::post('update/{id}', [CategoryController::class,'update']);
-    Route::post('delete/{id}', [CategoryController::class,'destroy']);
-});

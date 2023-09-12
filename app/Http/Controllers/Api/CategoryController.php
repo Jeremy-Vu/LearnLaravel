@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\Category\CategoryRepository;
+use App\Repositories\Eloquent\Category\CategoryRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -24,7 +24,7 @@ class CategoryController extends Controller
      *
      * @return CategoryRepository[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function getAll()
+    public function index()
     {
         return $this->_categoryRepository->getAll();
     }
