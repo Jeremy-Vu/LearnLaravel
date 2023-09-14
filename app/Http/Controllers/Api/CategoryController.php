@@ -41,6 +41,7 @@ class CategoryController extends Controller
         $result = $request->all();
         $validator = Validator::make($result, [
             'name' => ['required', 'max:255'],
+            'parent_id' => ['nullable']
         ]);
 
         if ($validator->fails()) {
@@ -96,6 +97,7 @@ class CategoryController extends Controller
             $result = $request->all();
             $validator = Validator::make($result, [
                 'name' => ['required', 'max:255'],
+                'parent_id' => ['nullable']
             ]);
             if ($validator->fails()) {
                 return response()->json([

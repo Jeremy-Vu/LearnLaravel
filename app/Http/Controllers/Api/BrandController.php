@@ -3,50 +3,46 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\Eloquent\Product\ProductRepository;
+use App\Repositories\Eloquent\Brand\BrandRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-class ProductController extends Controller
+class BrandController extends Controller
 {
-    protected $_productRepository;
+    protected $_brandRepository;
+
     public function __construct(
-        ProductRepository $productRepository
+        BrandRepository $categoryRepository
     )
     {
-        $this->_productRepository = $productRepository;
+        $this->_brandRepository = $categoryRepository;
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return Collection|ProductRepository[]
+     * @return Collection
      */
     public function index()
     {
-        return $this->_productRepository->getAll();
+        return $this->_brandRepository->getAll();
     }
+
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return JsonResponse
      */
-    public function addProduct(Request $request)
+    public function addCategory(Request $request)
     {
         $result = $request->all();
         $validator = Validator::make($result, [
             'name' => ['required', 'max:255'],
-            'brand' => ['required', 'max:255'],
-            'slug' => ['nullable'],
-            'sku' => ['required','unique:product'],
-            'detail_product' => ['max:255','nullable'],
-            'brand_id' => ['nullable','integer'],
-            'category_id'=> ['integer','nullable'],
+            'description' => ['nullable']
         ]);
 
         if ($validator->fails()) {
@@ -56,13 +52,12 @@ class ProductController extends Controller
             ], 400);
         }
 
-        $this->_productRepository->create($result);
+        $this->_brandRepository->create($result);
         return response()->json([
             'status' => 200,
             'message' => 'Created',
             'data' => $result
         ], 200);
-
     }
 
     /**
@@ -73,8 +68,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $result = $this->_productRepository->find($id);
-//        $categoryName = $result->category->name;
+        $result = $this->_brandRepository->find($id);
 
         if ($result){
             return response()->json([
@@ -85,31 +79,25 @@ class ProductController extends Controller
 
         return response()->json([
             'status' => 401,
-            'message' => 'Product not found',
-        ],401);
+            'message' => 'Category not found',
+        ],400);
     }
-
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  int  $id
      * @return JsonResponse
      */
     public function update(Request $request, $id)
     {
-        $productById = $this->_productRepository->find($id);
-        if ($productById) {
+        $brandById = $this->_brandRepository->find($id);
+
+        if ($brandById) {
             $result = $request->all();
             $validator = Validator::make($result, [
                 'name' => ['required', 'max:255'],
-                'brand' => ['required', 'max:255'],
-                'slug' => ['nullable'],
-                'sku' => ['required'],
-                'detail_product' => ['max:255','nullable'],
-                'brand_id' => ['nullable','integer'],
-                'category_id'=> ['integer','nullable'],
             ]);
             if ($validator->fails()) {
                 return response()->json([
@@ -118,7 +106,7 @@ class ProductController extends Controller
                 ], 400);
             }
 
-            $this->_productRepository->update($id, $result);
+            $this->_brandRepository->update($id, $result);
             return response()->json([
                 'status' => 200,
                 'message' => 'Updated',
@@ -128,7 +116,7 @@ class ProductController extends Controller
 
         return response()->json([
             'status' => 401,
-            'message' => 'Product not found',
+            'message' => 'Category not found',
         ], 401);
     }
 
@@ -140,9 +128,9 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $productById = $this->_productRepository->find($id);
-        if ($productById) {
-            $this->_productRepository->delete($id);
+        $brandById = $this->_brandRepository->find($id);
+        if ($brandById) {
+            $this->_brandRepository->delete($id);
             return response()->json([
                 'status' => 200,
                 'message' => 'Deleted',
@@ -150,7 +138,7 @@ class ProductController extends Controller
         }
         return response()->json([
             'status' => 401,
-            'message' => 'Product not found',
+            'message' => 'Category not found',
         ], 401);
     }
 }

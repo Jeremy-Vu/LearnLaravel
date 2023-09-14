@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ProductController;
 use Illuminate\Http\Request;
@@ -39,6 +40,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('show/{id}', [ProductController::class,'show']);
         Route::post('update/{id}', [ProductController::class,'update']);
         Route::post('delete/{id}', [ProductController::class,'destroy']);
+    });
+    Route::group(['prefix' => 'brand',  'middleware' => 'checkAdmin'], function() {
+        Route::get('getAll', [BrandController::class,'index']);
+        Route::post('add', [BrandController::class,'addProduct']);
+        Route::get('show/{id}', [BrandController::class,'show']);
+        Route::post('update/{id}', [BrandController::class,'update']);
+        Route::post('delete/{id}', [BrandController::class,'destroy']);
     });
 
 });
