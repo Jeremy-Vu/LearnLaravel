@@ -21,10 +21,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::post('/login', [AuthController::class, 'login']);
 
+Route::post('/register', [AuthController::class, 'register']);
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/register', [AuthController::class, 'register']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::group(['prefix' => 'category',  'middleware' => 'checkAdmin'], function() {
@@ -43,7 +43,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
     Route::group(['prefix' => 'brand',  'middleware' => 'checkAdmin'], function() {
         Route::get('getAll', [BrandController::class,'index']);
-        Route::post('add', [BrandController::class,'addProduct']);
+        Route::post('add', [BrandController::class,'addBrand']);
         Route::get('show/{id}', [BrandController::class,'show']);
         Route::post('update/{id}', [BrandController::class,'update']);
         Route::post('delete/{id}', [BrandController::class,'destroy']);

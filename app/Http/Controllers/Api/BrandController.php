@@ -37,7 +37,7 @@ class BrandController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function addCategory(Request $request)
+    public function addBrand(Request $request)
     {
         $result = $request->all();
         $validator = Validator::make($result, [

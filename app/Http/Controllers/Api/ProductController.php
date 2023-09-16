@@ -41,14 +41,18 @@ class ProductController extends Controller
         $result = $request->all();
         $validator = Validator::make($result, [
             'name' => ['required', 'max:255'],
-            'brand' => ['required', 'max:255'],
             'slug' => ['nullable'],
+            'price' => ['required'],
             'sku' => ['required','unique:product'],
             'detail_product' => ['max:255','nullable'],
             'brand_id' => ['nullable','integer'],
+            'image' => ['nullable'],
+            'quantity' => ['integer'],
+            'quantity_sell' => ['nullable','integer'],
+            'quantity_left' => ['nullable', 'integer'],
             'category_id'=> ['integer','nullable'],
+            'status' => ['nullable', 'integer']
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                 'status' => 400,
