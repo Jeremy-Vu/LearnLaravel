@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('brand', function (Blueprint $table) {
+        Schema::create('attributes', function (Blueprint $table) {
             $table->id();
-            $table->string('name',55);
-            $table->integer('phone');
-            $table->string('image',255)->nullable();
-            $table->longText('description');
+            $table->string('color',55);
+            $table->string('size',55);
+            $table->integer('quantity');
+            $table->integer('product_id');
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('brand');
+        Schema::dropIfExists('attributes');
     }
 };

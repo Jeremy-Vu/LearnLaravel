@@ -6,7 +6,7 @@ use Illuminate\Foundation\Application;
 
 /**
  * Class BaseEloquentRepository
- * @package App\Repositories\ContractsRepository
+ * @package App\Repositories
  */
 abstract class BaseEloquentRepository implements RepositoryInterface
 {

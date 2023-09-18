@@ -3,69 +3,64 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\Eloquent\Product\ProductRepository;
+use App\Repositories\Eloquent\Attribute\AttributeRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-class ProductController extends Controller
+class AttributeController extends Controller
 {
-    protected $_productRepository;
+    protected $_attributeRepository;
+
     public function __construct(
-        ProductRepository $productRepository
+        AttributeRepository $attributeRepository
     )
     {
-        $this->_productRepository = $productRepository;
+        $this->_attributeRepository = $attributeRepository;
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return Collection|ProductRepository[]
+     * @return Collection
      */
     public function index()
     {
-        return $this->_productRepository->getAll();
+        return $this->_attributeRepository->getAll();
     }
+
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return JsonResponse
      */
-    public function addProduct(Request $request)
+    public function create(Request $request)
     {
         $result = $request->all();
+
         $validator = Validator::make($result, [
-            'name' => ['required', 'max:255'],
-            'slug' => ['nullable'],
-            'price' => ['required'],
-            'sku' => ['required','unique:product'],
-            'detail_product' => ['max:255','nullable'],
-            'description' => ['nullable'],
-            'brand_id' => ['nullable','integer'],
-            'image' => ['nullable'],
-            'category_id'=> ['integer','nullable'],
-            'status' => ['nullable', 'integer']
+            'color' => ['required'],
+            'size' => ['required'],
+            'quantity' => ['required','numeric'],
+            'product_id' => ['required'],
         ]);
+
         if ($validator->fails()) {
             return response()->json([
                 'status' => 400,
                 'message' => 'Validate failed, pls check again',
-                'errors' => $validator->errors()
             ], 400);
         }
 
-        $this->_productRepository->create($result);
+        $this->_attributeRepository->create($result);
         return response()->json([
             'status' => 200,
             'message' => 'Created',
             'data' => $result
         ], 200);
-
     }
 
     /**
@@ -76,7 +71,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $result = $this->_productRepository->find($id);
+        $result = $this->_attributeRepository->find($id);
 
         if ($result){
             return response()->json([
@@ -87,44 +82,38 @@ class ProductController extends Controller
 
         return response()->json([
             'status' => 401,
-            'message' => 'Product not found',
-        ],401);
+            'message' => 'Attribute not found',
+        ],400);
     }
-
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  int  $id
      * @return JsonResponse
      */
     public function update(Request $request, $id)
     {
-        $productById = $this->_productRepository->find($id);
-        if ($productById) {
-            $result = $request->all();
+        $attrById = $this->_attributeRepository->find($id);
+
+        $result = $request->all();
+        if ($attrById) {
             $validator = Validator::make($result, [
-                'name' => ['required', 'max:255'],
-                'slug' => ['nullable'],
-                'price' => ['required'],
-                'sku' => ['required','unique:product'],
-                'detail_product' => ['max:255','nullable'],
-                'description' => ['nullable'],
-                'brand_id' => ['nullable','integer'],
-                'image' => ['nullable'],
-                'category_id'=> ['integer','nullable'],
-                'status' => ['nullable', 'integer']
+                'color' => ['required'],
+                'size' => ['required'],
+                'quantity' => ['required','numeric'],
+                'product_id' => ['required'],
             ]);
+
             if ($validator->fails()) {
                 return response()->json([
                     'status' => 400,
                     'message' => 'Validate failed, pls check again',
-                    'errors' => $validator->errors()
                 ], 400);
             }
 
-            $this->_productRepository->update($id, $result);
+            $this->_attributeRepository->update($id, $result);
             return response()->json([
                 'status' => 200,
                 'message' => 'Updated',
@@ -134,7 +123,7 @@ class ProductController extends Controller
 
         return response()->json([
             'status' => 401,
-            'message' => 'Product not found',
+            'message' => 'Attribute not found',
         ], 401);
     }
 
@@ -146,9 +135,9 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $productById = $this->_productRepository->find($id);
-        if ($productById) {
-            $this->_productRepository->delete($id);
+        $attrById = $this->_attributeRepository->find($id);
+        if ($attrById) {
+            $this->_attributeRepository->delete($id);
             return response()->json([
                 'status' => 200,
                 'message' => 'Deleted',
@@ -156,7 +145,7 @@ class ProductController extends Controller
         }
         return response()->json([
             'status' => 401,
-            'message' => 'Product not found',
+            'message' => 'Attribute not found',
         ], 401);
     }
 }

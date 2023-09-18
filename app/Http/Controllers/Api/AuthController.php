@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use JsonException;
 
 class AuthController extends Controller
@@ -44,7 +45,6 @@ class AuthController extends Controller
         $userInfo->password = Hash::make($result['password']);
         $userInfo->save();
 
-        $token =  $userInfo->createToken('API Token')->plainTextToken;
         return response()->json([
             'status' => 200,
             'message' => 'Register successfully',
@@ -63,8 +63,8 @@ class AuthController extends Controller
         ];
         if (Auth::attempt($infoUser)) {
             $user = $this->_user->where('email', $result['email'])->first();
-            $token = $user->createToken('apiToken')->plainTextToken;
-
+//            $token = $user->createToken('apiToken')->plainTextToken;
+            $token = Str::random(80);
             return response()->json([
                 'status' => 200,
                 'message' => 'U are logged in!',

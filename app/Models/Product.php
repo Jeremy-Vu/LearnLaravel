@@ -22,7 +22,6 @@ class Product extends Model
         'image',
         'quantity',
         'quantity_sell',
-        'quantity_left',
         'sku',
         'status'
     ];
