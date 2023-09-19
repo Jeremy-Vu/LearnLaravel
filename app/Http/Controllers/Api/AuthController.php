@@ -35,19 +35,22 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 400,
                 'message' => 'Validate failed, pls check again',
+                'error' => $validator->errors()
             ], 400);
         }
-
+        $token = Str::random(80);
         $userInfo = $this->_user;
         $userInfo->name = $result['name'];
         $userInfo->email = $result['email'];
         $userInfo->roles = $result['roles'];
         $userInfo->password = Hash::make($result['password']);
+        $userInfo->api_token = hash('sha256', $token);
         $userInfo->save();
 
         return response()->json([
             'status' => 200,
             'message' => 'Register successfully',
+            'token' => $token
         ], 200);
     }
 
@@ -63,7 +66,6 @@ class AuthController extends Controller
         ];
         if (Auth::attempt($infoUser)) {
             $user = $this->_user->where('email', $result['email'])->first();
-//            $token = $user->createToken('apiToken')->plainTextToken;
             $token = Str::random(80);
             return response()->json([
                 'status' => 200,

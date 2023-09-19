@@ -1,0 +1,8 @@
+api:
+danh sách sản phẩm
+chi tiết sản phẩm
+profile user
+thêm đơn hàng
+danh sách order
+danh mục sản phẩm
+danh sách brand

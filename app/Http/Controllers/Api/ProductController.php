@@ -39,6 +39,7 @@ class ProductController extends Controller
     public function addProduct(Request $request)
     {
         $result = $request->all();
+
         $validator = Validator::make($result, [
             'name' => ['required', 'max:255'],
             'slug' => ['nullable'],
@@ -101,9 +102,10 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $result = $request->all();
         $productById = $this->_productRepository->find($id);
         if ($productById) {
-            $result = $request->all();
+
             $validator = Validator::make($result, [
                 'name' => ['required', 'max:255'],
                 'slug' => ['nullable'],

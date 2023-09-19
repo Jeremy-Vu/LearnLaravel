@@ -43,7 +43,7 @@ class CustomerController extends Controller
         $validator = Validator::make($result, [
             'name' => ['required', 'max:255'],
             'phone' => ['required','numeric', 'digits:10','unique:customers'],
-            'birthdate' => ['date_format:Y-m-d','before:today'],
+            'birthdate' => ['date_format:d-m-Y','before:today'],
             'address' => ['required'],
             'email' => ['nullable', 'email', 'unique:customers']
         ]);
@@ -52,8 +52,10 @@ class CustomerController extends Controller
             return response()->json([
                 'status' => 400,
                 'message' => 'Validate failed, pls check again',
+                'error' => $validator->errors()
             ], 400);
         }
+        $result['birthdate'] = date('Y-m-d', strtotime($result['birthdate']));
 
         $this->_customerRepository->create($result);
         return response()->json([
