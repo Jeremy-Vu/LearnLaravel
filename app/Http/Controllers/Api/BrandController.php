@@ -42,6 +42,8 @@ class BrandController extends Controller
         $result = $request->all();
         $validator = Validator::make($result, [
             'name' => ['required', 'max:255'],
+            'phone' => ['numeric', 'digits:10'],
+            'image' => ['nullable'],
             'description' => ['nullable']
         ]);
 
@@ -49,6 +51,7 @@ class BrandController extends Controller
             return response()->json([
                 'status' => 400,
                 'message' => 'Validate failed, pls check again',
+                'error' => $validator->errors()
             ], 400);
         }
 

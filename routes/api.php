@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -65,6 +66,14 @@ Route::middleware(['auth:api'])->group(function () {
         Route::get('show/{id}', [AttributeController::class,'show']);
         Route::post('update/{id}', [AttributeController::class,'update']);
         Route::delete('delete/{id}', [AttributeController::class,'destroy']);
+    });
+
+    Route::group(['prefix' => 'order',  'middleware' => 'checkAdmin'], function() {
+        Route::get('getAll', [OrderController::class,'index']);
+        Route::post('add', [OrderController::class,'create']);
+        Route::get('show/{id}', [OrderController::class,'show']);
+        Route::post('update/{id}', [OrderController::class,'update']);
+        Route::delete('delete/{id}', [OrderController::class,'destroy']);
     });
 
 

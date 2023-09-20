@@ -21,7 +21,7 @@ class Product extends Model
         'slug',
         'image',
         'quantity',
-        'quantity_sell',
+        'description',
         'sku',
         'status'
     ];

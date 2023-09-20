@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name',255);
             $table->decimal('price', 12,2);
+            $table->integer('quantity');
             $table->string('slug',255)->unique();
             $table->string('image')->nullable();
             $table->string('sku',55);

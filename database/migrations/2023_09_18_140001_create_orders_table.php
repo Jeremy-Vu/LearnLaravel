@@ -21,9 +21,9 @@ return new class extends Migration
             $table->string('payment_method',55);
             $table->boolean('status');
             $table->string('order_code');
-            $table->string('order_note');
+            $table->string('order_note')->nullable();
             $table->string('address',255);
-            $table->date('deleted_at');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

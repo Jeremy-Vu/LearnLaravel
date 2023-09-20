@@ -105,11 +105,11 @@ class ProductController extends Controller
         $result = $request->all();
         $productById = $this->_productRepository->find($id);
         if ($productById) {
-
             $validator = Validator::make($result, [
                 'name' => ['required', 'max:255'],
                 'slug' => ['nullable'],
-                'price' => ['required'],
+                'price' => ['required', 'numeric', 'between:0,9999999999.99'],
+                'quantity' => ['required', 'numeric'],
                 'sku' => ['required','unique:product'],
                 'detail_product' => ['max:255','nullable'],
                 'description' => ['nullable'],

@@ -38,19 +38,17 @@ class AuthController extends Controller
                 'error' => $validator->errors()
             ], 400);
         }
-        $token = Str::random(80);
+
         $userInfo = $this->_user;
         $userInfo->name = $result['name'];
         $userInfo->email = $result['email'];
         $userInfo->roles = $result['roles'];
         $userInfo->password = Hash::make($result['password']);
-        $userInfo->api_token = hash('sha256', $token);
         $userInfo->save();
 
         return response()->json([
             'status' => 200,
             'message' => 'Register successfully',
-            'token' => $token
         ], 200);
     }
 
@@ -64,9 +62,11 @@ class AuthController extends Controller
             'email' => $result['email'],
             'password' => $result['password']
         ];
+        $token = Str::random(80);
         if (Auth::attempt($infoUser)) {
             $user = $this->_user->where('email', $result['email'])->first();
-            $token = Str::random(80);
+            $user->api_token = hash('sha256', $token);
+            $user->save();
             return response()->json([
                 'status' => 200,
                 'message' => 'U are logged in!',
@@ -88,6 +88,10 @@ class AuthController extends Controller
             'status' => 200,
             'message' => 'You are logout!'
         ], 200);
+    }
+
+    public function show (Request $request, $id) {
+        return $this->_user->find($id);
     }
 
 }

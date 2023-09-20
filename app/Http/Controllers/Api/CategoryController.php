@@ -41,6 +41,7 @@ class CategoryController extends Controller
         $result = $request->all();
         $validator = Validator::make($result, [
             'name' => ['required', 'max:255'],
+            'product_id' => ['required', 'numeric'],
             'parent_id' => ['nullable']
         ]);
 

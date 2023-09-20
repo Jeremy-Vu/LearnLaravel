@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('order_id');
             $table->decimal('price',12,2);
             $table->integer('quantity');
-            $table->date('deleted_at');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('order_details');
+        Schema::dropIfExists('orders_details');
     }
 };
