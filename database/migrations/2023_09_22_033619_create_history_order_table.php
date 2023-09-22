@@ -13,16 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('brand', function (Blueprint $table) {
+        Schema::create('history_order', function (Blueprint $table) {
             $table->id();
-            $table->string('name',255);
-            $table->string('slug',255);
-            $table->integer('phone');
-            $table->string('email',55)->unique();
-            $table->string('logo',255)->nullable();
-            $table->text('address');
-            $table->boolean('status')->default(1);
-            $table->softDeletes();
+            $table->integer('order_id');
+            $table->integer('customer_id');
+            $table->date('order_date');
+            $table->decimal('total_amount',12,2);
             $table->timestamps();
         });
     }
@@ -34,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('brand');
+        Schema::dropIfExists('history_order');
     }
 };

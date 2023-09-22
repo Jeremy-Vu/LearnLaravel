@@ -15,9 +15,15 @@ return new class extends Migration
     {
         Schema::create('category', function (Blueprint $table) {
             $table->id();
-            $table->string('name',55);
-            $table->integer('product_id');
+            $table->string('name',255);
+            $table->string('slug',255)->unique();
+            $table->string('description',500)->nullable();
+            $table->text('content')->nullable();
+            $table->string('image',255)->nullable();
+            $table->boolean('status')->default(1)->comment('1 = Active, 2 = Inactive');
+            $table->boolean('is_menu')->default(1)->comment('1 = Active, 2 = Inactive');
             $table->integer('parrent_id')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
