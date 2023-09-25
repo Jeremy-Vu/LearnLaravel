@@ -2,16 +2,17 @@
 namespace App\Repositories\Eloquent\Customer;
 
 use App\Models\Customer;
-use App\Repositories\Eloquent\EloquentRepository;
+use App\Repositories\BaseEloquentRepository;
 
-class CustomerRepository extends EloquentRepository
+class CustomerRepository extends BaseEloquentRepository
 {
     /**
      * get model
      * @return string
      */
-    public function getModel()
+    public function model()
     {
         return Customer::class;
     }
+
 }

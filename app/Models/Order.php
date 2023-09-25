@@ -18,9 +18,8 @@ class Order extends Model
         'payment_method',
         'phone',
         'customer_id',
-        'order_code',
         'order_note',
-        'status'
+        'total_amount'
     ];
 
     public function product()
@@ -31,4 +30,19 @@ class Order extends Model
     {
         return $this->hasMany(OrderDetail::class);
     }
+
+    public function historyOrder()
+    {
+        return $this->hasMany(HistoryOrder::class);
+    }
+
+    public function getCreatedAttribute(){
+        return $this->attributes['created_at'];
+    }
+
+    public function getId(){
+        return $this->attributes['id'];
+    }
+
+
 }

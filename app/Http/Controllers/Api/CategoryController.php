@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Repositories\Eloquent\Category\CategoryRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return $this->_categoryRepository->getAll();
+        return $this->_categoryRepository->all();
     }
 
 
@@ -41,7 +42,8 @@ class CategoryController extends Controller
         $result = $request->all();
         $validator = Validator::make($result, [
             'name' => ['required', 'max:255'],
-            'product_id' => ['required', 'numeric'],
+            'content' => ['nullable'],
+            'description' => ['nullable', 'max:255'],
             'parent_id' => ['nullable']
         ]);
 
@@ -51,7 +53,8 @@ class CategoryController extends Controller
                 'message' => 'Validate failed, pls check again',
             ], 400);
         }
-
+        $categoryModel = new Category();
+        $result['slug'] = $categoryModel->setCategorySlug($result['name']);
         $this->_categoryRepository->create($result);
         return response()->json([
             'status' => 200,
@@ -68,7 +71,7 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        $result = $this->_categoryRepository->find($id);
+        $result = $this->_categoryRepository->findById($id);
 
         if ($result){
             return response()->json([
@@ -92,12 +95,14 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $categoryById = $this->_categoryRepository->find($id);
+        $categoryById = $this->_categoryRepository->findById($id);
 
         if ($categoryById) {
             $result = $request->all();
             $validator = Validator::make($result, [
                 'name' => ['required', 'max:255'],
+                'content' => ['nullable'],
+                'description' => ['nullable', 'max:255'],
                 'parent_id' => ['nullable']
             ]);
             if ($validator->fails()) {
@@ -129,7 +134,7 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $categoryById = $this->_categoryRepository->find($id);
+        $categoryById = $this->_categoryRepository->findById($id);
         if ($categoryById) {
             $this->_categoryRepository->delete($id);
             return response()->json([

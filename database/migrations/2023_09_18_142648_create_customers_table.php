@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('email',55)->unique();
             $table->string('password');
-            $table->string('api_token');
+            $table->string('api_token',80)->nullable()->unique()->default(NULL);
             $table->string('name',55);
             $table->string('phone');
             $table->date('birthdate');

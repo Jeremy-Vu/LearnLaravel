@@ -1,5 +1,6 @@
 <?php
 namespace App\Repositories;
+
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Application;
@@ -8,7 +9,7 @@ use Illuminate\Foundation\Application;
  * Class BaseEloquentRepository
  * @package App\Repositories
  */
-abstract class BaseEloquentRepository implements RepositoryInterface
+abstract class BaseEloquentRepository
 {
     /**
      * @var Application
@@ -415,7 +416,7 @@ abstract class BaseEloquentRepository implements RepositoryInterface
      * @param $id
      * @return mixed
      */
-    public function update(array $attributes, $id)
+    public function update($id, array $attributes)
     {
         $model = $this->model->findOrFail($id);
         $model->fill($attributes);

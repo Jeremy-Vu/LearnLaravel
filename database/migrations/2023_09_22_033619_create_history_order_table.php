@@ -18,7 +18,6 @@ return new class extends Migration
             $table->integer('order_id');
             $table->integer('customer_id');
             $table->date('order_date');
-            $table->decimal('total_amount',12,2);
             $table->timestamps();
         });
     }

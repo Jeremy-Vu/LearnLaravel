@@ -27,7 +27,7 @@ class AttributeController extends Controller
      */
     public function index()
     {
-        return $this->_attributeRepository->getAll();
+        return $this->_attributeRepository->all();
     }
 
 
@@ -71,7 +71,7 @@ class AttributeController extends Controller
      */
     public function show($id)
     {
-        $result = $this->_attributeRepository->find($id);
+        $result = $this->_attributeRepository->findById($id);
 
         if ($result){
             return response()->json([
@@ -95,7 +95,7 @@ class AttributeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $attrById = $this->_attributeRepository->find($id);
+        $attrById = $this->_attributeRepository->findById($id);
 
         $result = $request->all();
         if ($attrById) {
@@ -135,7 +135,7 @@ class AttributeController extends Controller
      */
     public function destroy($id)
     {
-        $attrById = $this->_attributeRepository->find($id);
+        $attrById = $this->_attributeRepository->findById($id);
         if ($attrById) {
             $this->_attributeRepository->delete($id);
             return response()->json([

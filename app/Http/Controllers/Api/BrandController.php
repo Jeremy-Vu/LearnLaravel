@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use App\Repositories\Eloquent\Brand\BrandRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
@@ -27,7 +28,7 @@ class BrandController extends Controller
      */
     public function index()
     {
-        return $this->_brandRepository->getAll();
+        return $this->_brandRepository->all();
     }
 
 
@@ -43,9 +44,14 @@ class BrandController extends Controller
         $validator = Validator::make($result, [
             'name' => ['required', 'max:255'],
             'phone' => ['numeric', 'digits:10'],
-            'image' => ['nullable'],
+            'logo' => ['nullable'],
+            'email' => ['required', 'max:255', 'email','unique:brand'],
             'description' => ['nullable']
         ]);
+
+        $brandModel = new Brand();
+
+        $result['slug'] = $brandModel->setBrandSlug($result['name']);
 
         if ($validator->fails()) {
             return response()->json([
@@ -71,7 +77,7 @@ class BrandController extends Controller
      */
     public function show($id)
     {
-        $result = $this->_brandRepository->find($id);
+        $result = $this->_brandRepository->findById($id);
 
         if ($result){
             return response()->json([
@@ -95,12 +101,16 @@ class BrandController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $brandById = $this->_brandRepository->find($id);
+        $brandById = $this->_brandRepository->findById($id);
 
         if ($brandById) {
             $result = $request->all();
             $validator = Validator::make($result, [
                 'name' => ['required', 'max:255'],
+                'phone' => ['numeric', 'digits:10'],
+                'logo' => ['nullable'],
+                'email' => ['required', 'max:255', 'email','unique:brand'],
+                'description' => ['nullable']
             ]);
             if ($validator->fails()) {
                 return response()->json([
@@ -131,7 +141,7 @@ class BrandController extends Controller
      */
     public function destroy($id)
     {
-        $brandById = $this->_brandRepository->find($id);
+        $brandById = $this->_brandRepository->findById($id);
         if ($brandById) {
             $this->_brandRepository->delete($id);
             return response()->json([

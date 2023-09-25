@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('address',255);
             $table->string('payment_method',55);
             $table->boolean('status')->default(1);
-            $table->string('order_code');
             $table->string('order_note')->nullable();
             $table->decimal('total_amount',12,2);
             $table->softDeletes();

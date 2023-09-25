@@ -2,15 +2,15 @@
 namespace App\Repositories\Eloquent\Product;
 
 use App\Models\Product;
-use App\Repositories\Eloquent\EloquentRepository;
+use App\Repositories\BaseEloquentRepository;
 
-class ProductRepository extends EloquentRepository
+class ProductRepository extends BaseEloquentRepository
 {
     /**
      * get model
      * @return string
      */
-    public function getModel()
+    public function model()
     {
         return Product::class;
     }

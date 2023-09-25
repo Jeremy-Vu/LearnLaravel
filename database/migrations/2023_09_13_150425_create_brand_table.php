@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('phone');
             $table->string('email',55)->unique();
             $table->string('logo',255)->nullable();
+            $table->text('description')->nullable();
             $table->text('address');
             $table->boolean('status')->default(1);
             $table->softDeletes();

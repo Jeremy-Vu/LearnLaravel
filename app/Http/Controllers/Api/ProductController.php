@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Repositories\Eloquent\Product\ProductRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
@@ -27,7 +28,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return $this->_productRepository->getAll();
+        return $this->_productRepository->all();
     }
 
     /**
@@ -42,7 +43,6 @@ class ProductController extends Controller
 
         $validator = Validator::make($result, [
             'name' => ['required', 'max:255'],
-            'slug' => ['nullable'],
             'price' => ['required'],
             'sku' => ['required','unique:product'],
             'detail_product' => ['max:255','nullable'],
@@ -59,6 +59,9 @@ class ProductController extends Controller
                 'errors' => $validator->errors()
             ], 400);
         }
+        $productModel = new Product();
+
+        $result['slug'] = $productModel->setProductSlug($result['name']);
 
         $this->_productRepository->create($result);
         return response()->json([
@@ -77,7 +80,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $result = $this->_productRepository->find($id);
+        $result = $this->_productRepository->findById($id);
 
         if ($result){
             return response()->json([
@@ -103,7 +106,7 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $result = $request->all();
-        $productById = $this->_productRepository->find($id);
+        $productById = $this->_productRepository->findById($id);
         if ($productById) {
             $validator = Validator::make($result, [
                 'name' => ['required', 'max:255'],
@@ -148,7 +151,7 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $productById = $this->_productRepository->find($id);
+        $productById = $this->_productRepository->findById($id);
         if ($productById) {
             $this->_productRepository->delete($id);
             return response()->json([

@@ -16,6 +16,8 @@ class Customer extends Model
         'phone',
         'birthdate',
         'address',
-        'email'
+        'email',
+        'api_token',
+        'password'
     ];
 }

@@ -2,15 +2,15 @@
 namespace App\Repositories\Eloquent\OrderDetail;
 
 use App\Models\OrderDetail;
-use App\Repositories\Eloquent\EloquentRepository;
+use App\Repositories\BaseEloquentRepository;
 
-class OrderDetailReposity extends EloquentRepository
+class OrderDetailReposity extends BaseEloquentRepository
 {
     /**
      * get model
      * @return string
      */
-    public function getModel()
+    public function model()
     {
         return OrderDetail::class;
     }

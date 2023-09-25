@@ -35,4 +35,10 @@ class Product extends Model
         return $this->belongsTo(Brand::class, 'brand_id');
     }
 
+    public function setProductSlug($value)
+    {
+        $this->attributes['name'] = $value;
+        return str()->slug($value);
+    }
+
 }

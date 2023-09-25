@@ -11,11 +11,21 @@ class Category extends Model
     protected $table = 'category';
     protected $fillable = [
         'name',
-        'product_id',
+        'slug',
+        'description',
+        'content',
+        'image',
+        'status',
+        'is_menu',
         'parrent_id'
     ];
 
     public function product() {
         return $this->hasMany(Product::class);
+    }
+
+    public function setCategorySlug($value ){
+        $this->attributes['name'] = $value;
+        return str()->slug($value);
     }
 }

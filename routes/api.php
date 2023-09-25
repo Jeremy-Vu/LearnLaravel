@@ -27,6 +27,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
+Route::post('customer/register', [CustomerController::class,'register']);
+Route::post('customer/login', [CustomerController::class,'login']);
+
+
 
 Route::middleware(['auth:api'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -53,6 +57,7 @@ Route::middleware(['auth:api'])->group(function () {
         Route::delete('delete/{id}', [BrandController::class,'destroy']);
     });
     Route::group(['prefix' => 'customer',  'middleware' => 'checkAdmin'], function() {
+        Route::get('logout', [CustomerController::class,'logout']);
         Route::get('getAll', [CustomerController::class,'index']);
         Route::post('add', [CustomerController::class,'createCustomer']);
         Route::get('show/{id}', [CustomerController::class,'show']);
@@ -76,6 +81,15 @@ Route::middleware(['auth:api'])->group(function () {
         Route::delete('delete/{id}', [OrderController::class,'destroy']);
     });
 
+    Route::get('/getHistoryOrder/{id}', [OrderController::class,'getHistoryOrderById']);
+});
 
+Route::group(['prefix' => 'customer/order',  'middleware' => 'CustomerToken'], function() {
+    Route::get('getAll', [OrderController::class,'index']);
+    Route::get('getHistoryOrder', [OrderController::class,'getHistoryOrderByCustomer']);
+    Route::post('add', [OrderController::class,'create']);
+    Route::get('show/{id}', [OrderController::class,'show']);
+    Route::post('update/{id}', [OrderController::class,'update']);
+    Route::delete('delete/{id}', [OrderController::class,'destroy']);
 });
 

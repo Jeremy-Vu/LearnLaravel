@@ -2,15 +2,15 @@
 namespace App\Repositories\Eloquent\Attribute;
 
 use App\Models\Attribute;
-use App\Repositories\Eloquent\EloquentRepository;
+use App\Repositories\BaseEloquentRepository;
 
-class AttributeRepository extends EloquentRepository
+class AttributeRepository extends BaseEloquentRepository
 {
     /**
      * get model
      * @return string
      */
-    public function getModel()
+    public function model()
     {
         return Attribute::class;
     }
