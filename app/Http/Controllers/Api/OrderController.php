@@ -76,7 +76,6 @@ class OrderController extends Controller
             'order_note' => ['nullable'],
         ]);
 
-
         if ($validator->fails()) {
             return response()->json([
                 'status' => 400,
@@ -88,20 +87,21 @@ class OrderController extends Controller
 
         $checkCustomer = $this->isCustomer($request->bearerToken());
 
-
         $dataOrder = [
             'name_customer' => $result['name_customer'],
             'phone' => $result['phone'],
             'payment_method' => $result['payment_method'],
             'order_note' => $result['order_note'],
             'address' => $result['address'],
-            'delete_at' => NULL
         ];
+
         if (isset($checkCustomer)){
             $dataOrder['customer_id'] = $checkCustomer;
         }else{
             $dataOrder['customer_id'] = null;
         }
+
+
         $orderDetails = $result['product_detail'];
         $dataOrder['total_amount'] = array_sum(array_column($orderDetails, 'price'));
         $orderModel->fill($dataOrder);
@@ -127,6 +127,7 @@ class OrderController extends Controller
             'order_code' => 'MDH-' . $orderModel->getId()
         ];
         $result= array_merge($orderCode, $result);
+
         return response()->json([
             'status' => 200,
             'message' => 'Created',

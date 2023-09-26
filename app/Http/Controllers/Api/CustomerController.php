@@ -150,7 +150,7 @@ class CustomerController extends Controller
                 ], 400);
             }
 
-//            $this->_customerRepository->update($id, $result);
+            $this->_customerRepository->update($id, $result);
             return response()->json([
                 'status' => 200,
                 'message' => 'Updated',

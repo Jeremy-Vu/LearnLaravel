@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('payment_method',55);
             $table->boolean('status')->default(1);
             $table->string('order_note')->nullable();
-            $table->decimal('total_amount',12,2);
+            $table->decimal('total_amount',12,2)->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

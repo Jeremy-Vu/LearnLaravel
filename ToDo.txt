@@ -21,3 +21,8 @@ Customer đăng nhập để mua hàng => set lại bảng customer
 Thêm api danh sách sản phẩm đã mua theo Customer
 
 History Orders
+
+Sửa lại logic mua hàng
+ko cần bảng history order
+bảng order : total_amout => NULL
+tạo admin
