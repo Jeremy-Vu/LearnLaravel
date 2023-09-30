@@ -24,12 +24,6 @@
             <div class="row justify-content-center">
                 <div class="col-lg-5">
                     <div class="card">
-                        <!-- Logo-->
-                        {{-- <div class="card-header pt-4 pb-4 text-center bg-primary">
-                                <a href="index.html">
-                                    <span><img src="assets/images/logo.png" alt="" height="18"></span>
-                                </a>
-                            </div> --}}
 
                         <div class="card-body p-4">
 
@@ -39,28 +33,28 @@
                                     a minute </p>
                             </div>
 
-                            <form action="{{ route('process_register') }}" method="post">
+                            <form action="{{ route('processRegister') }}" method="post">
                                 @csrf
                                 <div class="form-group">
                                     <label>Full Name</label>
-                                    <input class="form-control" type="name" name="name" placeholder="Enter your name">
+                                    <input class="form-control" type="text" name="name" placeholder="Enter your name">
                                 </div>
-                                @if ($errors->has('name'))
-                                    <span class="error" style="color: red;">
-                                        {{ $errors->first('name') }}
-                                    </span>
-                                @endif
+{{--                                @if ($errors->has('name'))--}}
+{{--                                    <span class="error" style="color: red;">--}}
+{{--                                        {{ $errors->first('name') }}--}}
+{{--                                    </span>--}}
+{{--                                @endif--}}
 
                                 <div class="form-group">
                                     <label>Email address</label>
                                     <input class="form-control" type="email" name="email"
                                         placeholder="Enter your email">
                                 </div>
-                                @if ($errors->has('email'))
-                                    <span class="error" style="color: red;">
-                                        {{ $errors->first('email') }}
-                                    </span>
-                                @endif
+{{--                                @if ($errors->has('email'))--}}
+{{--                                    <span class="error" style="color: red;">--}}
+{{--                                        {{ $errors->first('email') }}--}}
+{{--                                    </span>--}}
+{{--                                @endif--}}
 
                                 <div class="form-group">
                                     <label>Password</label>
@@ -74,11 +68,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if ($errors->has('password'))
-                                    <span class="error" style="color: red;">
-                                        {{ $errors->first('password') }}
-                                    </span>
-                                @endif
+{{--                                @if ($errors->has('password'))--}}
+{{--                                    <span class="error" style="color: red;">--}}
+{{--                                        {{ $errors->first('password') }}--}}
+{{--                                    </span>--}}
+{{--                                @endif--}}
 
                                 <div class="form-group">
                                     <label>Confirm Password</label>
@@ -93,11 +87,11 @@
                                     </div>
                                 </div>
 
-                                @if ($errors->has('confirm_password'))
-                                    <span class="error" style="color: red;">
-                                        {{ $errors->first('confirm_password') }}
-                                    </span>
-                                @endif
+{{--                                @if ($errors->has('confirm_password'))--}}
+{{--                                    <span class="error" style="color: red;">--}}
+{{--                                        {{ $errors->first('confirm_password') }}--}}
+{{--                                    </span>--}}
+{{--                                @endif--}}
 
 
 
@@ -127,7 +121,7 @@
     <!-- end page -->
 
     <footer class="footer footer-alt">
-        Demo quản lý panel khách sạn 
+        Welcome
     </footer>
 
     <!-- bundle -->

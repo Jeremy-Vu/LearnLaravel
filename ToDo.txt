@@ -1,28 +1,10 @@
-api:
-danh sách sản phẩm
-chi tiết sản phẩm
-profile customer
-thêm đơn hàng
-danh sách order
-danh mục sản phẩm
-danh sách brand
 
-order code tự tăng
-status k cần truyền
-
-đẩy product detail => array object ( đẩy nhiều sản phẩm lên )
-
-thêm tổng tiền vào bảng orders
-
-bỏ product_id ở bảng category
-
-Customer đăng nhập để mua hàng => set lại bảng customer
-
-Thêm api danh sách sản phẩm đã mua theo Customer
-
-History Orders
 
 Sửa lại logic mua hàng
 ko cần bảng history order
 bảng order : total_amout => NULL
 tạo admin
+
+
+thêm SKU vào order_details
+đổ thêm order_detail ra khi mua hàng thành công

@@ -81,7 +81,7 @@ Route::middleware(['auth:api'])->group(function () {
         Route::delete('delete/{id}', [OrderController::class,'destroy']);
     });
 
-    Route::get('/getHistoryOrder/{id}', [OrderController::class,'getHistoryOrderById']);
+    Route::get('/getHistoryOrderByCustomerId/{id}', [OrderController::class,'getHistoryOrderByCustomerId']);
 });
 
 Route::group(['prefix' => 'customer/order',  'middleware' => 'CustomerToken'], function() {

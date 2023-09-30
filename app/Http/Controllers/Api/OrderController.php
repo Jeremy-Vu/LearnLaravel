@@ -3,13 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\HistoryOrder;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Repositories\Eloquent\Customer\CustomerRepository;
-use App\Repositories\Eloquent\HistoryOrder\HistoryOrderRepository;
 use App\Repositories\Eloquent\Order\OrderRepository;
 use App\Repositories\Eloquent\OrderDetail\OrderDetailReposity;
+use App\Repositories\Eloquent\Product\ProductRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,20 +19,20 @@ class OrderController extends Controller
     protected $_orderRepository;
     protected $_orderDetailRepository;
     protected $_customerRepository;
-    protected $_historyRepository;
+    protected $_productRepository;
 
 
     public function __construct(
         OrderRepository $orderRepository,
         OrderDetailReposity $orderDetailRepository,
         CustomerRepository $customerRepository,
-        HistoryOrderRepository $historyOrderRepository
+        ProductRepository $productRepository
     )
     {
-        $this->_historyRepository = $historyOrderRepository;
         $this->_orderRepository = $orderRepository;
         $this->_orderDetailRepository = $orderDetailRepository;
         $this->_customerRepository = $customerRepository;
+        $this->_productRepository = $productRepository;
     }
 
     /**
@@ -46,8 +45,8 @@ class OrderController extends Controller
         return $this->_orderRepository->all();
     }
 
-    public function isCustomer($bearerToken){
-        $hashedReceivedToken  = hash('sha256', $bearerToken);
+    public function isCustomer(Request $request){
+        $hashedReceivedToken  = hash('sha256',$request->bearerToken());
         $customerByToken = $this->_customerRepository->findByField('api_token', $hashedReceivedToken);
 
         if ($customerByToken) {
@@ -85,7 +84,7 @@ class OrderController extends Controller
         }
         $orderModel = new Order();
 
-        $checkCustomer = $this->isCustomer($request->bearerToken());
+        $checkCustomer = $this->isCustomer($request);
 
         $dataOrder = [
             'name_customer' => $result['name_customer'],
@@ -93,38 +92,41 @@ class OrderController extends Controller
             'payment_method' => $result['payment_method'],
             'order_note' => $result['order_note'],
             'address' => $result['address'],
+            'customer_id' => $checkCustomer ?? null
         ];
 
-        if (isset($checkCustomer)){
-            $dataOrder['customer_id'] = $checkCustomer;
-        }else{
-            $dataOrder['customer_id'] = null;
-        }
-
-
-        $orderDetails = $result['product_detail'];
-        $dataOrder['total_amount'] = array_sum(array_column($orderDetails, 'price'));
         $orderModel->fill($dataOrder);
         $orderModel->save();
+        $productDetails = $result['product_detail'];
 
-        foreach ($orderDetails as $orderDetailData) {
-            $orderDetail = new OrderDetail();
-            $orderDetail->product_id = $orderDetailData['product_id'];
-            $orderDetail->price = $orderDetailData['price'];
-            $orderDetail->quantity = $orderDetailData['quantity'];
-            $orderModel->orderDetails()->save($orderDetail);
+        $totalPrice = 0;
+        foreach ($productDetails as $productDetail) {
+            $product = $this->_productRepository->findById($productDetail['product_id']);
+            if ($product) {
+                if ($productDetail['quantity'] < 1){
+                    $totalPrice += $product->price * 1;
+                }else{
+                    $totalPrice += $productDetail['quantity'] * $product->price;
+                }
+                $orderDetail = new OrderDetail();
+                $orderDetail->product_id = $productDetail['product_id'];
+                $orderDetail->price = $product->price;
+                $orderDetail->quantity = $productDetail['quantity'];
+                $orderModel->orderDetails()->save($orderDetail);
+            }else{
+                return response()->json([
+                    'status' => 401,
+                    'message' => 'Product không tồn tại',
+                ], 401);
+            }
         }
-        $historyOrder = new HistoryOrder();
-        if (isset($checkCustomer)){
-            $historyOrder->customer_id = $checkCustomer;
-        }else{
-            $historyOrder->customer_id = null;
-        }
-        $historyOrder->order_date = $orderModel->getCreatedAttribute();
-        $orderModel->historyOrder()->save($historyOrder);
+        $dataOrder['total_amount'] = $totalPrice;
+
+        $this->_orderRepository->update($orderModel->getId(),$dataOrder);
 
         $orderCode = [
-            'order_code' => 'MDH-' . $orderModel->getId()
+            'order_code' => 'MDH-' . $orderModel->getId(),
+            'total_amount' => $totalPrice
         ];
         $result= array_merge($orderCode, $result);
 
@@ -158,34 +160,28 @@ class OrderController extends Controller
         ],400);
     }
 
-    public function getHistoryOrderById($id){
-        $historyOrder = $this->_historyRepository->findById($id);
-        if ($historyOrder) {
+    public function getHistoryOrderByCustomerId($id){
+        $result = $this->_orderRepository->findByField('customer_id',$id);
+        if ($result){
             return response()->json([
                 'status' => 200,
-                'data' => $historyOrder
+                'data' => $result->get()
             ], 200);
         }
         return response()->json([
             'status' => 401,
-            'message' => 'History order not found',
+            'message' => 'Customer not found',
         ],400);
     }
 
 
     public function getHistoryOrderByCustomer(Request $request){
-        $customerId = $this->isCustomer($request->bearerToken());
-        $historyOrder = $this->_historyRepository->findByField('customer_id',$customerId);
-        if ($historyOrder) {
-            return response()->json([
-                'status' => 200,
-                'data' => $historyOrder
-            ], 200);
-        }
+        $result = $this->_orderRepository->findByField('customer_id', $this->isCustomer($request))->get();
+
         return response()->json([
-            'status' => 401,
-            'message' => 'History order not found',
-        ],400);
+            'status' => 200,
+            'data' => $result
+        ], 200);
     }
 
     /**

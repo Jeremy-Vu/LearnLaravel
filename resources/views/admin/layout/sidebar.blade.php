@@ -27,7 +27,7 @@
         <!--- Sidemenu -->
         <ul class="metismenu side-nav">
 
-            <li class="side-nav-title side-nav-item">Quản lý phòng khách sạn</li>
+            <li class="side-nav-title side-nav-item">Quản lý sản phẩm</li>
 
             <li class="side-nav-item">
                 <a href="javascript: void(0);" class="side-nav-link">
@@ -38,68 +38,59 @@
             </li>
 
             <li class="side-nav-item">
-                <a href={{ route('khach-hang.index') }} class="side-nav-link">
+                <a href={{ route('admin.customer.index') }} class="side-nav-link">
                     <i class="uil-store"></i>
-                    <span>Quản lý khách hàng </span>
+                    <span> Quản lý khách hàng </span>
                 </a>
             </li>
 
-            <li class="side-nav-item">
-                <a href="javascript: void(0);" class="side-nav-link">
-                    <i class="uil-envelope"></i>
-                    <span> Quản lý phòng </span>
-                    <span class="menu-arrow"></span>
-                </a>
-                <ul class="side-nav-second-level" aria-expanded="false">
-                    <li>
-                        <a href="{{ route('phong.index') }}">Phòng</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('loai-phong.index') }}">Loại phòng</a>
-                    </li>
-                    
-                </ul>
-            </li>
 
             <li class="side-nav-item">
                 <a href="javascript: void(0);" class="side-nav-link">
                     <i class="uil-briefcase"></i>
-                    <span>Quản lý phiếu thuê </span>
+                    <span>Quản lý hoá đơn </span>
                     <span class="menu-arrow"></span>
                 </a>
                 <ul class="side-nav-second-level" aria-expanded="false">
                     <li>
-                        <a href="{{ route('phieu-thue.index') }}">Phiếu thuê</a>
+                        <a href="{{ route('admin.order.index') }}">Hoá đơn</a>
                     </li>
                     <li>
-                        <a href="{{ route('dich-vu.index') }}">Dịch vụ</a>
+                        <a href="{{ route('admin.orderdetail.index') }}">Chi tiết hoá đơn</a>
                     </li>
                 </ul>
             </li>
 
             <li class="side-nav-item">
-                <a href="{{ route('hoa-don.index') }}" class="side-nav-link">
+                <a href="{{ route('admin.product.index') }}" class="side-nav-link">
                     <i class="uil-rss"></i>
-                    <span> Hoá đơn </span>
+                    <span> Quản lý sản phẩm </span>
                 </a>
             </li>
-            @if(checkSuperAdmin())
+
             <li class="side-nav-item">
-                <a href="javascript: void(0);" class="side-nav-link">
-                    <i class="uil-clipboard-alt"></i>
-                    <span> Quản lý nhân viên </span>
-                    <span class="menu-arrow"></span>
+                <a href="{{ route('admin.category.index') }}" class="side-nav-link">
+                    <i class="uil-rss"></i>
+                    <span> Quản lý danh mục </span>
                 </a>
-                <ul class="side-nav-second-level" aria-expanded="false">
-                    <li>
-                        <a href="{{ route('nhan-vien.index') }}">Nhân viên</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('chuc-vu.index') }}">Chức vụ</a>
-                    </li>
-                </ul>
             </li>
-            @endif
+{{--            @if(checkSuperAdmin())--}}
+{{--            <li class="side-nav-item">--}}
+{{--                <a href="javascript: void(0);" class="side-nav-link">--}}
+{{--                    <i class="uil-clipboard-alt"></i>--}}
+{{--                    <span> Quản lý nhân viên </span>--}}
+{{--                    <span class="menu-arrow"></span>--}}
+{{--                </a>--}}
+{{--                <ul class="side-nav-second-level" aria-expanded="false">--}}
+{{--                    <li>--}}
+{{--                        <a href="{{ route('nhan-vien.index') }}">Nhân viên</a>--}}
+{{--                    </li>--}}
+{{--                    <li>--}}
+{{--                        <a href="{{ route('chuc-vu.index') }}">Chức vụ</a>--}}
+{{--                    </li>--}}
+{{--                </ul>--}}
+{{--            </li>--}}
+{{--            @endif--}}
 
 
         </ul>

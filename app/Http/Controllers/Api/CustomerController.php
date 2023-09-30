@@ -53,6 +53,7 @@ class CustomerController extends Controller
         }
         $result['birthdate'] = date('Y-m-d', strtotime($result['birthdate']));
         $result['password'] = Hash::make($result['password']);
+
         $this->_customerRepository->create($result);
         return response()->json([
             'status' => 200,
