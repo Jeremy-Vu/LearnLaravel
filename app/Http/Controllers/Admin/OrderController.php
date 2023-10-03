@@ -91,22 +91,22 @@ class OrderController extends Controller
     {
         $result = $request->all();
 
-        $validator = Validator::make($result, [
-            'name_customer' => ['required', 'max:255'],
-            'phone' => ['numeric', 'digits:10'],
-            'payment_method' => ['required'],
-            'address' => ['required'],
-            'order_note' => ['nullable'],
-        ]);
+//        $validator = Validator::make($result, [
+//            'name_customer' => ['required', 'max:255'],
+//            'phone' => ['numeric', 'digits:10'],
+//            'payment_method' => ['required'],
+//            'address' => ['required'],
+//            'order_note' => ['nullable'],
+//        ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 400,
-                'message' => 'Validate failed, pls check again',
-                'error' => $validator->errors()
-            ], 400);
-        }
-        $orderModel = new Order();
+//        if ($validator->fails()) {
+//            return response()->json([
+//                'status' => 400,
+//                'message' => 'Validate failed, pls check again',
+//                'error' => $validator->errors()
+//            ], 400);
+//        }
+//        $orderModel = new Order();
 
         $checkCustomer = $this->isCustomer($request);
 

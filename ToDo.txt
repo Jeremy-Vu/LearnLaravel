@@ -8,3 +8,13 @@ tạo admin
 
 thêm SKU vào order_details
 đổ thêm order_detail ra khi mua hàng thành công
+
+
+3/10
+trình bày lại giao diện admin
+thêm phần search, filter, paginate
+
+Action Column : Sửa xoá
+
+Khi thêm k cần input slug
+

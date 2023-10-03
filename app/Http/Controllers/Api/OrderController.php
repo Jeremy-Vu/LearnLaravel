@@ -122,13 +122,25 @@ class OrderController extends Controller
         }
         $dataOrder['total_amount'] = $totalPrice;
 
-        $this->_orderRepository->update($orderModel->getId(),$dataOrder);
+        $this->_orderRepository->update($orderModel->getId(), $dataOrder);
 
         $orderCode = [
             'order_code' => 'MDH-' . $orderModel->getId(),
             'total_amount' => $totalPrice
         ];
-        $result= array_merge($orderCode, $result);
+
+        $result = array_merge($orderCode, $result);
+        $productIds = array_column($result['product_detail'], 'product_id');
+        $products = $this->_productRepository->findWhereIn('id', $productIds);
+
+        foreach ($result['product_detail'] as &$item) {
+            $product_id = $item['product_id'];
+            $product = $products->firstWhere('id', $product_id);
+
+            if ($product) {
+                $item['sku'] = $product->sku;
+            }
+        }
 
         return response()->json([
             'status' => 200,

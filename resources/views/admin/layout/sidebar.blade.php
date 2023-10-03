@@ -62,10 +62,19 @@
             </li>
 
             <li class="side-nav-item">
-                <a href="{{ route('admin.product.index') }}" class="side-nav-link">
-                    <i class="uil-rss"></i>
+                <a href="javascript: void(0);" class="side-nav-link">
+                    <i class="uil-briefcase"></i>
                     <span> Quản lý sản phẩm </span>
+                    <span class="menu-arrow"></span>
                 </a>
+                <ul class="side-nav-second-level" aria-expanded="false">
+                    <li>
+                        <a href="{{ route('admin.product.index') }}"> Sản phẩm </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.brand.index') }}">Thương hiệu</a>
+                    </li>
+                </ul>
             </li>
 
             <li class="side-nav-item">

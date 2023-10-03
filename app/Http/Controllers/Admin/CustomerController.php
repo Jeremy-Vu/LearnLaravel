@@ -42,73 +42,44 @@ class CustomerController extends Controller
         ]);
     }
 
-    public function register(Request $request)
-    {
-        $result = $request->all();
-        $validator = Validator::make($result, [
-            'email' => ['required', 'email', 'unique:customers','max:255'],
-            'password' => ['required', 'min:6'],
-            'name' => ['required', 'max:255'],
-            'phone' => ['required', 'numeric', 'digits:10', 'unique:customers'],
-            'birthdate' => ['date_format:d-m-Y', 'before:today'],
-            'address' => ['required']
+
+    public function create() {
+
+        return view('admin.customer.create');
+    }
+
+    public function store(Request $request){
+
+        $request->validate([
+            'email' => 'required|email|unique:customers',
+            'password' => 'required|min:6',
+            'confirm_password' => 'required|same:password',
+            'name' => 'required|string',
+            'phone' => 'required|numeric|digits:10|unique:customers',
+            'birthdate' => 'before:today',
+            'address' => 'required|string'
+        ],[
+            'email.required' => 'Email không được trống',
+            'email.unique' => 'Email đã tồn tại',
+            'password.required' => 'Mật khẩu không được trống',
+            'password.min:6' => 'Mật khẩu ít nhất 6 ký tự',
+            'confirm_password.required' => 'Mật khẩu xác thực không được trống',
+            'confirm_password.same' => 'Mật khẩu xác thực không đúng',
+            'name.required' => 'Tên không được trống',
+            'phone.required' => 'Số điện thoại không được trống',
+            'phone.numeric' => 'Số điện thoại không hợp lệ',
+            'phone.digits' => 'Số điện thoại không hợp lệ',
+            'phone.unique' => 'Số điện thoại đã tồn tại',
+            'address.required' => 'Địa chỉ không được trống',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 400,
-                'message' => 'Validate failed, pls check again',
-                'error' => $validator->errors()
-            ], 400);
+        try {
+            $this->_customerRepository->create($request->all());
+            return redirect()->route('admin.customer.index')->with('success', 'Thêm khách hàng thành công');
+        } catch (\Throwable $e){
+            return redirect()->back()->with('error', 'Something wrong');
         }
-        $result['birthdate'] = date('Y-m-d', strtotime($result['birthdate']));
-        $result['password'] = Hash::make($result['password']);
-        $this->_customerRepository->create($result);
-        return response()->json([
-            'status' => 200,
-            'message' => 'Customer register successfully',
-        ], 200);
-
     }
-
-    public function login(Request $request)
-    {
-        $result = $request->all();
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|string',
-            'password' => 'required|string',
-        ]);
-        $token = Str::random(80);
-        $customerByEmail = $this->_customerRepository->findByField('email', $result['email']);
-
-        if ($customerByEmail) {
-            if (Hash::check($request->password, $customerByEmail->password)) {
-                $customerByEmail->api_token = hash('sha256', $token);
-                $customerByEmail->save();
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'U are logged in!',
-                    'token' => $token
-                ], 200);
-            }
-
-            $response = ["message" => "Pwd wrong"];
-            return response($response, 422);
-        }
-
-        return response()->json([
-            'status' => 401,
-            'message' => 'Login failed, pls check your email or pwd',
-            'errors' => $validator->fails()
-        ], 401);
-    }
-
-    public function logout(Request $request)
-    {
-
-    }
-
-
     /**
      * Display the specified resource.
      *
@@ -132,67 +103,84 @@ class CustomerController extends Controller
         ], 400);
     }
 
+    public function edit($id)
+    {
+        try {
+            $customerById = $this->_customerRepository->findById($id);
+            if ($customerById) {
+                return view('admin.customer.edit', [
+                    'each' => $customerById
+                ]);
+            }
+            return redirect()->back()->with('error', 'Customer không tồn tại');
+
+        } catch (\Throwable $e) {
+            return redirect()->route('admin.customer.index')->with('error', $e->getMessage());
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      *
      * @param Request $request
      * @param int $id
-     * @return JsonResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
-        $customerById = $this->_customerRepository->findById($id);
-
-        $result = $request->all();
-        if ($customerById) {
-            $validator = Validator::make($result, [
-                'name' => ['required', 'max:255'],
-                'phone' => ['required', 'numeric', 'digits:10', 'unique:customers'],
-                'birthdate' => ['date_format:Y-m-d', 'before:today'],
-                'address' => ['required'],
-                'email' => ['nullable', 'email', 'unique:customers']
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => 400,
-                    'message' => 'Validate failed, pls check again',
-                ], 400);
+        $request->validate([
+            'email' => 'required|email|unique:customers,email,'.$id.',id',
+            'password' => 'required|min:6',
+            'confirm_password' => 'required|same:password',
+            'name' => 'required|string',
+            'phone' => 'required|numeric|digits:10|unique:customers,phone,'.$id.',id',
+            'birthdate' => 'before:today',
+            'address' => 'required|string'
+        ],[
+            'email.required' => 'Email không được trống',
+            'email.unique' => 'Email đã tồn tại',
+            'password.required' => 'Mật khẩu không được trống',
+            'password.min:6' => 'Mật khẩu ít nhất 6 ký tự',
+            'confirm_password.required' => 'Mật khẩu xác thực không được trống',
+            'confirm_password.same' => 'Mật khẩu xác thực không đúng',
+            'name.required' => 'Tên không được trống',
+            'phone.required' => 'Số điện thoại không được trống',
+            'phone.numeric' => 'Số điện thoại không hợp lệ',
+            'phone.digits' => 'Số điện thoại không hợp lệ',
+            'phone.unique' => 'Số điện thoại đã tồn tại',
+            'address.required' => 'Địa chỉ không được trống',
+        ]);
+        try {
+            $customerById = $this->_customerRepository->findById($id);
+            if ($customerById) {
+                $this->_customerRepository->update($id , $request->all());
+                return redirect()->route('admin.customer.index')->with('success', 'Sửa thông tin khách hàng thành công');
             }
+            return redirect()->back()->with('error', 'Customer không tồn tại');
 
-            $this->_customerRepository->update($id, $result);
-            return response()->json([
-                'status' => 200,
-                'message' => 'Updated',
-                'data' => $result
-            ], 200);
+        } catch (\Throwable $e) {
+            return redirect()->route('admin.customer.index')->with('error', $e->getMessage());
         }
 
-        return response()->json([
-            'status' => 401,
-            'message' => 'Customer not found',
-        ], 401);
     }
-
     /**
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return JsonResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
-        $customerById = $this->_customerRepository->findById($id);
-        if ($customerById) {
-            $this->_customerRepository->delete($id);
-            return response()->json([
-                'status' => 200,
-                'message' => 'Deleted',
-            ], 200);
+        try {
+            $customerById = $this->_customerRepository->findById($id);
+            if ($customerById) {
+                $this->_customerRepository->delete($id);
+                return redirect()->route('admin.customer.index')->with('success', 'Xoá thông tin khách hàng thành công');
+            }
+            return redirect()->back()->with('error', 'Customer không tồn tại');
+
+        } catch (\Throwable $e) {
+            return redirect()->route('admin.customer.index')->with('error', $e->getMessage());
         }
-        return response()->json([
-            'status' => 401,
-            'message' => 'Customer not found',
-        ], 401);
     }
 }

@@ -39,22 +39,22 @@
                                     <label>Full Name</label>
                                     <input class="form-control" type="text" name="name" placeholder="Enter your name">
                                 </div>
-{{--                                @if ($errors->has('name'))--}}
-{{--                                    <span class="error" style="color: red;">--}}
-{{--                                        {{ $errors->first('name') }}--}}
-{{--                                    </span>--}}
-{{--                                @endif--}}
+                                @if ($errors->has('name'))
+                                    <span class="error" style="color: red;">
+                                        {{ $errors->first('name') }}
+                                    </span>
+                                @endif
 
                                 <div class="form-group">
                                     <label>Email address</label>
                                     <input class="form-control" type="email" name="email"
                                         placeholder="Enter your email">
                                 </div>
-{{--                                @if ($errors->has('email'))--}}
-{{--                                    <span class="error" style="color: red;">--}}
-{{--                                        {{ $errors->first('email') }}--}}
-{{--                                    </span>--}}
-{{--                                @endif--}}
+                                @if ($errors->has('email'))
+                                    <span class="error" style="color: red;">
+                                        {{ $errors->first('email') }}
+                                    </span>
+                                @endif
 
                                 <div class="form-group">
                                     <label>Password</label>
@@ -68,11 +68,11 @@
                                         </div>
                                     </div>
                                 </div>
-{{--                                @if ($errors->has('password'))--}}
-{{--                                    <span class="error" style="color: red;">--}}
-{{--                                        {{ $errors->first('password') }}--}}
-{{--                                    </span>--}}
-{{--                                @endif--}}
+                                @if ($errors->has('password'))
+                                    <span class="error" style="color: red;">
+                                        {{ $errors->first('password') }}
+                                    </span>
+                                @endif
 
                                 <div class="form-group">
                                     <label>Confirm Password</label>
@@ -87,11 +87,11 @@
                                     </div>
                                 </div>
 
-{{--                                @if ($errors->has('confirm_password'))--}}
-{{--                                    <span class="error" style="color: red;">--}}
-{{--                                        {{ $errors->first('confirm_password') }}--}}
-{{--                                    </span>--}}
-{{--                                @endif--}}
+                                @if ($errors->has('confirm_password'))
+                                    <span class="error" style="color: red;">
+                                        {{ $errors->first('confirm_password') }}
+                                    </span>
+                                @endif
 
 
 

@@ -9,10 +9,10 @@
             <caption>
                 <form class="float-right form-group form-inline">
                     <label class="mr-1">Search:</label>
-{{--                    <input type="search" name="q" value="{{ //$search }}" placeholder="Tìm theo tên..." class="form-control">--}}
+{{--                    <input type="search" name="q" value="{{ $search }}" placeholder="Tìm theo tên..." class="form-control">--}}
                 </form>
             </caption>
-            <table  class="table table-striped table-centered mb-0">
+            <table class="table table-striped table-centered mb-0">
                 <tr>
                     <th>Mã khách hàng</th>
                     <th>Tên khách hàng</th>
@@ -21,9 +21,9 @@
                     <th>Giới tính</th>
                     <th>SĐT</th>
                     <th>Sửa</th>
-{{--                    @if(checkSuperAdmin())--}}
-{{--                        <th>Xoá</th>--}}
-{{--                    @endif--}}
+                    {{--                    @if(checkSuperAdmin())--}}
+                    <th>Xoá</th>
+                    {{--                    @endif--}}
 
                 </tr>
 
@@ -38,22 +38,20 @@
                         <td>
                             <a class="btn btn-primary" href="{{ route('admin.customer.edit', $each) }}">Sửa</a>
                         </td>
-{{--                        @if(checkSuperAdmin())--}}
-{{--                            <td>--}}
-{{--                                <form action="{{ route('khach-hang.destroy', $each) }}" method="post">--}}
-{{--                                    @csrf--}}
-{{--                                    @method('DELETE')--}}
-{{--                                    <button class="btn btn-danger">Xoá</button>--}}
-{{--                                </form>--}}
-{{--                            </td>--}}
-{{--                        @endif--}}
+                        <td>
+                            <form onclick="return confirm('Em có chắc không?')" action="{{ route('admin.customer.destroy', $each) }}" method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-danger">Xoá</button>
+                            </form>
+                        </td>
 
                     </tr>
                 @endforeach
             </table>
             <nav>
                 <ul class="pagination pagination-rounded mb-0">
-{{--                    {{ $data->links() }}--}}
+                    {{--                    {{ $data->links() }}--}}
                 </ul>
             </nav>
         </div>

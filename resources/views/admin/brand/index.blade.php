@@ -1,11 +1,11 @@
 @extends('admin.layout.master')
 @section('content')
-    <h3>Quản lý sản phẩm</h3>
+    <h3>Thương hiệu</h3>
 
     <div class="card">
         <div class='card-body'>
 
-            <a class="btn btn-success" href="{{ route('admin.product.create')}}">Thêm </a>
+            <a class="btn btn-success" href="{{ route('admin.brand.create')}}">Thêm </a>
             <caption>
                 <form class="float-right form-group form-inline">
                     <label class="mr-1">Search:</label>
@@ -14,45 +14,45 @@
             </caption>
             <table class="table table-striped table-centered mb-0">
                 <tr>
-                    <th>Mã sản phẩm</th>
-                    <th>Tên sản phẩm</th>
-                    <th>Giá</th>
-                    <th>Số lượng</th>
+                    <th>Mã thương hiệu</th>
+                    <th>Tên thương hiệu</th>
                     <th>Slug</th>
-                    <th>Ảnh</th>
-                    <th>SKU</th>
-                    <th>Chi tiết sản phẩm</th>
+                    <th>Số điện thoại</th>
+                    <th>Email</th>
+                    <th>Logo</th>
                     <th>Mô tả</th>
-                    <th>Thương hiệu</th>
-                    <th>Danh mục</th>
+                    <th>Địa chỉ</th>
                     <th>Trạng thái</th>
-                    <th>Action</th>
+                    <th>Sửa</th>
                     {{--                    @if(checkSuperAdmin())--}}
+{{--                    <th>Xoá</th>--}}
                     {{--                    @endif--}}
 
                 </tr>
+
                 @foreach ($data as $each)
                     <tr>
                         <td>{{ $each->id }}</td>
                         <td>{{ $each->name }}</td>
-                        <td>{{ $each->price }}</td>
-                        <td>{{ $each->quantity }}</td>
                         <td>{{ $each->slug }}</td>
-                        <td>{{ $each->image }}</td>
-                        <td>{{ $each->sku }}</td>
-                        <td>{{ $each->detail_product }}</td>
+                        <td>{{ $each->phone }}</td>
+                        <td>{{ $each->email }}</td>
+                        <td>{{ $each->logo }}</td>
                         <td>{{ $each->description }}</td>
-                        <td>{{ $each->brand_id }}</td>
-                        <td>{{ $each->category_id }}</td>
+                        <td>{{ $each->address }}</td>
                         <td>{{ $each->status ? 'Active' : 'Inactive' }}</td>
                         <td>
-                            <a class="btn btn-primary" href="{{ route('admin.product.edit', $each) }}">Sửa</a>
-                            <form onclick="return confirm('Em có chắc không?')" action="{{ route('admin.product.destroy', $each) }}" method="post">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn btn-danger">Xoá</button>
-                            </form>
+                            <a class="btn btn-primary" href="{{ route('admin.brand.edit', $each) }}">Sửa</a>
                         </td>
+                        {{--                        @if(checkSuperAdmin())--}}
+{{--                        <td>--}}
+{{--                            <form onclick="return confirm('Em có chắc không?')" action="{{ route('admin.brand.destroy', $each) }}" method="post">--}}
+{{--                                @csrf--}}
+{{--                                @method('DELETE')--}}
+{{--                                <button class="btn btn-danger">Xoá</button>--}}
+{{--                            </form>--}}
+{{--                        </td>--}}
+                        {{--                        @endif--}}
 
                     </tr>
                 @endforeach
