@@ -34,6 +34,7 @@ Route::group(['middleware' => ['web']], function () {
             Route::post('/create', [OrderController::class, 'store'])->name('admin.order.store');
             Route::get('/edit/{id}', [OrderController::class, 'edit'])->name('admin.order.edit');
             Route::put('/edit/{id}', [OrderController::class, 'update'])->name('admin.order.update');
+            Route::delete('/delete/{id}', [OrderController::class, 'destroy'])->name('admin.order.destroy');
         });
 
         Route::group(['prefix' => 'orderdetail'], function () {
@@ -55,6 +56,7 @@ Route::group(['middleware' => ['web']], function () {
             Route::post('/create', [CategoryController::class, 'store'])->name('admin.category.store');
             Route::get('/edit/{id}', [CategoryController::class, 'edit'])->name('admin.category.edit');
             Route::put('/edit/{id}', [CategoryController::class, 'update'])->name('admin.category.update');
+            Route::delete('/delete/{id}', [CategoryController::class, 'destroy'])->name('admin.category.destroy');
         });
 
         Route::group(['prefix' => 'brand'], function () {
@@ -63,6 +65,7 @@ Route::group(['middleware' => ['web']], function () {
             Route::post('/create', [BrandController::class, 'store'])->name('admin.brand.store');
             Route::get('/edit/{id}', [BrandController::class, 'edit'])->name('admin.brand.edit');
             Route::put('/edit/{id}', [BrandController::class, 'update'])->name('admin.brand.update');
+            Route::delete('/delete/{id}', [BrandController::class, 'destroy'])->name('admin.brand.destroy');
         });
     });
 });

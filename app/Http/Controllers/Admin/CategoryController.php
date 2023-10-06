@@ -27,17 +27,17 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $data = $this->_categoryRepository->all();
         $search = $request->get('q');
+        $data = $this->_categoryRepository->paginateWhereLikeOrderBy(['status' => 1], ['name' => $search]);
 
-//        $data = $this->_customerRepository->paginateWhere()
-//            ->where('name', 'like', '%'. $search. '%')
-//            ->paginate(10);
-
-        return view('admin.product.index', [
+        return view('admin.category.index', [
             'data' => $data,
-//            'search' => $search,
+            'search' => $search,
         ]);
+    }
+
+    public function create(){
+        return view('admin.category.create');
     }
 
 
@@ -47,7 +47,7 @@ class CategoryController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function addCategory(Request $request)
+    public function store(Request $request)
     {
         $result = $request->all();
         $validator = Validator::make($result, [
@@ -71,6 +71,21 @@ class CategoryController extends Controller
             'message' => 'Created',
             'data' => $result
         ], 200);
+    }
+
+    public function edit($id){
+        try {
+            $categoryById = $this->_categoryRepository->findById($id);
+            if ($categoryById) {
+                return view('admin.category.edit', [
+                    'each' => $categoryById
+                ]);
+            }
+            return redirect()->back()->with('error', 'Danh mục sản phẩm không tồn tại');
+
+        } catch (\Throwable $e) {
+            return redirect()->route('admin.category.index')->with('error', $e->getMessage());
+        }
     }
 
     /**

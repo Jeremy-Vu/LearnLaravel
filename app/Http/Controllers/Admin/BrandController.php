@@ -7,6 +7,7 @@ use App\Repositories\Eloquent\Brand\BrandRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class BrandController extends Controller
 {
@@ -26,15 +27,12 @@ class BrandController extends Controller
      */
     public function index(Request $request)
     {
-        $data = $this->_brandRepository->all();
         $search = $request->get('q');
-//        $where = [
-//            'name' => $search
-//        ];
+        $data = $this->_brandRepository->paginateWhereLikeOrderBy(['status' => 1], ['name' => $search]);
 
         return view('admin.brand.index', [
             'data' => $data,
-//            'search' => $search,
+            'search' => $search,
         ]);
     }
 
@@ -52,31 +50,29 @@ class BrandController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'price' => 'required',
-            'sku' => 'required|unique:product',
-            'detail_product' => 'max:255|nullable',
-            'quantity' => 'required',
-            'description' => 'nullable',
-            'brand_id' => 'nullable',
-            'image' => 'nullable',
-            'category_id' => 'nullable',
-            'status' => 'nullable',
-            'slug' => 'nullable'
+            'name' => 'required|unique:brand',
         ], [
             'name.required' => 'Tên không được trống.',
-            'price.required' => 'Giá không được trống.',
-            'sku.required' => 'SKU không được trống.',
-            'sku.unique' => 'SKU đã tồn tại.',
-            'detail_product.max' => 'Chi tiết sản phẩm không được vượt quá 255 ký tự.',
-            'status.integer' => 'Trạng thái phải là một số nguyên.',
         ]);
         $data = [
-
+            'name' => $request['name'],
+            'slug' => str()->slug($request['name']),
+            'phone' => $request['phone'],
+            'email' => $request['email'],
+            'description' => $request['description'],
+            'address' => $request['address'],
         ];
+
+        if ($img = $request->file('logo')) {
+            $filename = Str::random(15). '.' . $img->extension();
+            $img->move(public_path('storage/uploads/banners/'), $filename);
+            $data['logo'] = 'storage/uploads/banners/'. $filename;
+        }
+
         try {
+
             $this->_brandRepository->create($data);
-            return redirect()->route('admin.product.index')->with('success', 'Thêm sản phẩm thành công');
+            return redirect()->route('admin.brand.index')->with('success', 'Thêm sản phẩm thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Something wrong');
         }
@@ -86,16 +82,16 @@ class BrandController extends Controller
     public function edit($id)
     {
         try {
-            $productById = $this->_brandRepository->findById($id);
-            if ($productById) {
-                return view('admin.product.edit', [
-                    'each' => $productById
+            $brandById = $this->_brandRepository->findById($id);
+            if ($brandById) {
+                return view('admin.brand.edit', [
+                    'each' => $brandById
                 ]);
             }
             return redirect()->back()->with('error', 'Sản phẩm không tồn tại');
 
         } catch (\Throwable $e) {
-            return redirect()->route('admin.product.index')->with('error', $e->getMessage());
+            return redirect()->route('admin.brand.index')->with('error', $e->getMessage());
         }
     }
 
@@ -156,12 +152,12 @@ class BrandController extends Controller
             $customerById = $this->_brandRepository->findById($id);
             if ($customerById) {
                 $this->_brandRepository->update($id, $request->all());
-                return redirect()->route('admin.product.index')->with('success', 'Sửa thông tin sản phẩm thành công');
+                return redirect()->route('admin.brand.index')->with('success', 'Sửa thông tin sản phẩm thành công');
             }
             return redirect()->back()->with('error', 'Sản phẩm không tồn tại');
 
         } catch (\Throwable $e) {
-            return redirect()->route('admin.product.index')->with('error', $e->getMessage());
+            return redirect()->route('admin.brand.index')->with('error', $e->getMessage());
         }
     }
 
@@ -174,15 +170,15 @@ class BrandController extends Controller
     public function destroy($id)
     {
         try {
-            $productById = $this->_brandRepository->findById($id);
-            if ($productById) {
+            $brandById = $this->_brandRepository->findById($id);
+            if ($brandById) {
                 $this->_brandRepository->delete($id);
-                return redirect()->route('admin.product.index')->with('success', 'Xoá thông tin sản phẩm thành công');
+                return redirect()->route('admin.brand.index')->with('success', 'Xoá thông tin thương hiệu thành công');
             }
-            return redirect()->back()->with('error', 'Sản phẩm không tồn tại');
+            return redirect()->back()->with('error', 'Thương hiệu không tồn tại');
 
         } catch (\Throwable $e) {
-            return redirect()->route('admin.product.index')->with('error', $e->getMessage());
+            return redirect()->route('admin.brand.index')->with('error', $e->getMessage());
         }
     }
 }

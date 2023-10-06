@@ -11,7 +11,7 @@
             display: block;
         }
     </style>
-    <form action="{{ route('admin.product.store') }}" method="post" style="display: table">
+    <form action="{{ route('admin.product.store') }}" method="post" style="display: table" enctype="multipart/form-data">
         @csrf
         <div class="form-group">
             <div style="display: table-row">

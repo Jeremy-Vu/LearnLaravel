@@ -39,15 +39,13 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $data = $this->_productRepository->all();
+//        $data = $this->_productRepository->all();
         $search = $request->get('q');
-//        $where = [
-//            'name' => $search
-//        ];
+        $data = $this->_productRepository->paginateWhereLikeOrderBy(['status'=> '1'], ['name' => $search]);
 
         return view('admin.product.index', [
             'data' => $data,
-//            'search' => $search,
+            'search' => $search,
         ]);
     }
 
@@ -77,7 +75,6 @@ class ProductController extends Controller
             'quantity' => 'required',
             'description' => 'nullable',
             'brand_id' => 'nullable',
-            'image' => 'nullable',
             'category_id' => 'nullable',
             'status' => 'nullable',
             'slug' => 'nullable'
@@ -90,6 +87,7 @@ class ProductController extends Controller
             'detail_product.max' => 'Chi tiết sản phẩm không được vượt quá 255 ký tự.',
             'status.integer' => 'Trạng thái phải là một số nguyên.',
         ]);
+
         $data = [
             'name' => $request['name'],
             'slug' => str()->slug($request['name']),
@@ -102,6 +100,11 @@ class ProductController extends Controller
             'category_id' => $request['category_id'],
             'image' => $request['image']
         ];
+        if ($img = $request->file('image')) {
+            $filename = time() . '.' . $img->extension();
+            $img->move(public_path('storage/uploads/products/'), $filename);
+            $data['image'] = 'storage/uploads/products/'. $filename;
+        }
         try {
             $this->_productRepository->create($data);
             return redirect()->route('admin.product.index')->with('success', 'Thêm sản phẩm thành công');

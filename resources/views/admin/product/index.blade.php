@@ -9,7 +9,7 @@
             <caption>
                 <form class="float-right form-group form-inline">
                     <label class="mr-1">Search:</label>
-                    {{--                    <input type="search" name="q" value="{{ $search }}" placeholder="Tìm theo tên..." class="form-control">--}}
+                    <input type="search" name="q" value="{{ $search }}" placeholder="Tìm theo tên..." class="form-control">
                 </form>
             </caption>
             <table class="table table-striped table-centered mb-0">
@@ -27,8 +27,6 @@
                     <th>Danh mục</th>
                     <th>Trạng thái</th>
                     <th>Action</th>
-                    {{--                    @if(checkSuperAdmin())--}}
-                    {{--                    @endif--}}
 
                 </tr>
                 @foreach ($data as $each)
@@ -38,7 +36,9 @@
                         <td>{{ $each->price }}</td>
                         <td>{{ $each->quantity }}</td>
                         <td>{{ $each->slug }}</td>
-                        <td>{{ $each->image }}</td>
+                        <td>
+                            <img src="{{ asset($each->image) }}" alt="product_img" style="max-height: 90px">
+                        </td>
                         <td>{{ $each->sku }}</td>
                         <td>{{ $each->detail_product }}</td>
                         <td>{{ $each->description }}</td>
@@ -59,7 +59,7 @@
             </table>
             <nav>
                 <ul class="pagination pagination-rounded mb-0">
-                    {{--                    {{ $data->links() }}--}}
+                    {{ $data->links() }}
                 </ul>
             </nav>
         </div>

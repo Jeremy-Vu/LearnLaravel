@@ -11,11 +11,12 @@
             display: block;
         }
     </style>
-    <form action="{{ route('admin.customer.store') }}" method="post" style="display: table">
+    <form action="{{ route('admin.brand.store') }}" method="post" style="display: table">
         @csrf
         <div class="form-group">
+
             <div style="display: table-row">
-                <label class="mr-1"> Tên khách hàng: </label>
+                <label class="mr-1"> Tên thương hiêụ  : </label>
                 <label>
                     <input type="text" name="name" value="{{ old('name') }}" class="form-control">
                     @if ($errors->has('name'))
@@ -27,7 +28,19 @@
             </div>
 
             <div style="display: table-row">
-                <label class="mr-1"> Email  : </label>
+                <label class="mr-1"> Số điện thoại: </label>
+                <label>
+                    <input type="number" min="0" name="phone" class="form-control" value="{{ old('phone') }}">
+                    @if ($errors->has('phone'))
+                        <span class="error" style="color: red; font-size: 12px;">
+                        {{ $errors->first('phone') }}
+                    </span>
+                    @endif
+                </label>
+            </div>
+
+            <div style="display: table-row">
+                <label class="mr-1"> Email: </label>
                 <label>
                     <input type="text" name="email" value="{{ old('email') }}" class="form-control">
                     @if ($errors->has('email'))
@@ -38,65 +51,46 @@
                 </label>
             </div>
 
-
             <div style="display: table-row">
-                <label class="mr-1"> Password: </label>
+                <label class="mr-1">  Logo: </label>
                 <label>
-                    <input type="password" name="password" class="form-control">
-                    @if ($errors->has('password'))
+                    <input type="file" name="logo" value="{{ old('logo') }}" class="form-control-file">
+                    @if ($errors->has('logo'))
                         <span class="error" style="color: red; font-size: 12px;">
-                             {{ $errors->first('password') }}
-                        </span>
-                    @endif
-                </label>
-            </div>
-
-
-            <div style="display: table-row">
-                <label class="mr-1"> Confirm Password: </label>
-                <label>
-                    <input type="password" name="confirm_password" class="form-control">
-                    @if ($errors->has('confirm_password'))
-                        <span class="error" style="color: red; font-size: 12px;">
-                     {{ $errors->first('confirm_password') }}
-                </span>
+                        {{ $errors->first('logo') }}
+                    </span>
                     @endif
                 </label>
             </div>
 
             <div style="display: table-row">
-                <label class="mr-1"> Số điện thoại: </label>
+                <label class="mr-1"> Mô tả: </label>
                 <label>
-                    <input type="number" name="phone" value="{{ old('phone') }}" class="form-control">
-
-                </label>
-            </div>
-
-            <div style="display: table-row">
-                <label class="mr-1"> Ngày sinh: </label>
-                <label>
-                    <input type="date" name="birthdate" value="{{ old('birthdate') }}" class="form-control">
-                    @if ($errors->has('birthdate'))
+                    <textarea type="text" name="description" placeholder="{{ old('description') }}"
+                              class="form-control">
+                    </textarea>
+                    @if ($errors->has('description'))
                         <span class="error" style="color: red; font-size: 12px;">
-                             {{ $errors->first('birthdate') }}
-                        </span>
+                        {{ $errors->first('description') }}
+                    </span>
                     @endif
                 </label>
+
             </div>
 
             <div style="display: table-row">
-                <label class="mr-1"> Địa chỉ: </label>
+                <label class="mr-1">Địa chỉ: </label>
                 <label>
                     <input type="text" name="address" value="{{ old('address') }}" class="form-control">
                     @if ($errors->has('address'))
                         <span class="error" style="color: red; font-size: 12px;">
-                             {{ $errors->first('address') }}
-                        </span>
+                        {{ $errors->first('address') }}
+                    </span>
                     @endif
                 </label>
-
             </div>
 
+            <br>
 
             <button class="btn btn-success">Tạo</button>
         </div>

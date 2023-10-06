@@ -9,10 +9,11 @@
             <caption>
                 <form class="float-right form-group form-inline">
                     <label class="mr-1">Search:</label>
-{{--                    <input type="search" name="q" value="{{ //$search }}" placeholder="Tìm theo tên..." class="form-control">--}}
+                    <input type="search" name="q" value="{{ $search }}" placeholder="Tìm theo mã đơn..."
+                           class="form-control">
                 </form>
             </caption>
-            <table  class="table table-striped table-centered mb-0">
+            <table class="table table-striped table-centered mb-0">
                 <tr>
                     <th>Mã đơn</th>
                     <th>Tên khách hàng</th>
@@ -23,10 +24,7 @@
                     <th>Trạng thái đơn hàng</th>
                     <th>Ghi chú</th>
                     <th>Tổng tiền</th>
-                    <th>Sửa</th>
-{{--                    @if(checkSuperAdmin())--}}
-{{--                        <th>Xoá</th>--}}
-{{--                    @endif--}}
+                    <th>Action</th>
 
                 </tr>
 
@@ -43,23 +41,19 @@
                         <td>{{ $each->total_amount }}</td>
                         <td>
                             <a class="btn btn-primary" href="{{ route('admin.order.edit', $each) }}">Sửa</a>
+                            <form action="{{ route('admin.order.destroy', $each) }}" method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-danger">Xoá</button>
+                            </form>
                         </td>
-{{--                        @if(checkSuperAdmin())--}}
-{{--                            <td>--}}
-{{--                                <form action="{{ route('khach-hang.destroy', $each) }}" method="post">--}}
-{{--                                    @csrf--}}
-{{--                                    @method('DELETE')--}}
-{{--                                    <button class="btn btn-danger">Xoá</button>--}}
-{{--                                </form>--}}
-{{--                            </td>--}}
-{{--                        @endif--}}
 
                     </tr>
                 @endforeach
             </table>
             <nav>
                 <ul class="pagination pagination-rounded mb-0">
-{{--                    {{ $data->links() }}--}}
+                    {{ $data->links() }}
                 </ul>
             </nav>
         </div>

@@ -29,20 +29,14 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
-        $data = $this->_customerRepository->all();
         $search = $request->get('q');
-
-//        $data = $this->_customerRepository->paginateWhere()
-//            ->where('name', 'like', '%'. $search. '%')
-//            ->paginate(10);
+        $data = $this->_customerRepository->paginateWhereLikeOrderBy((array)null,['name' => $search]);
 
         return view('admin.customer.index', [
             'data' => $data,
-//            'search' => $search,
+            'search' => $search,
         ]);
     }
-
-
     public function create() {
 
         return view('admin.customer.create');
